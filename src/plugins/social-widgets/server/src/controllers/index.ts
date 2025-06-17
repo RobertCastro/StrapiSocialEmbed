@@ -1,5 +1,5 @@
-import controller from './controller';
+import auth from './auth';
 
 export default {
-  controller,
+  auth,
 };

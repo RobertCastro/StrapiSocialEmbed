@@ -1,5 +1,5 @@
-import service from './service';
+import instagram from './instagram';
 
 export default {
-  service,
+  instagram,
 };

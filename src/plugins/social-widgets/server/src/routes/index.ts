@@ -1,10 +1,18 @@
-import contentAPIRoutes from './content-api';
-
-const routes = {
-  'content-api': {
-    type: 'content-api',
-    routes: contentAPIRoutes,
+export default [
+  {
+    method: 'GET',
+    path: '/connect/instagram',
+    handler: 'auth.connectInstagram',
+    config: {
+      auth: false,
+    },
   },
-};
-
-export default routes;
+  {
+    method: 'GET',
+    path: '/connect/instagram/callback',
+    handler: 'auth.callbackInstagram',
+    config: {
+      auth: false,
+    },
+  },
+];
