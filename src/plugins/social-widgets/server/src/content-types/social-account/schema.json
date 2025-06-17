@@ -36,6 +36,12 @@
         "tiktok"
       ],
       "required": true
+    },
+    "configurations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::social-widgets.widget-configuration",
+      "mappedBy": "account"
     }
   }
 }
