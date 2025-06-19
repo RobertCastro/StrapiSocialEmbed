@@ -15,4 +15,13 @@ export default [
       auth: false,
     },
   },
+  // --- FAKE ---
+  {
+    method: 'POST',
+    path: '/developer/add-fake-account',
+    handler: 'auth.addFakeAccount',
+    config: {
+      auth: false,
+    },
+  },
 ];
