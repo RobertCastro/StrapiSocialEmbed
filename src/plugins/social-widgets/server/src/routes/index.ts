@@ -1,5 +1,5 @@
 export default [
-  // === AUTENTICACIÓN ===
+  // === AUTENTICACIÓN INSTAGRAM ===
   {
     method: 'GET',
     path: '/connect/instagram',
@@ -14,6 +14,34 @@ export default [
     handler: 'auth.callbackInstagram',
     config: {
       auth: false,
+    },
+  },
+
+  // === AUTENTICACIÓN TIKTOK ===
+  {
+    method: 'GET',
+    path: '/connect/tiktok',
+    handler: 'auth.connectTikTok',
+    config: {
+      auth: false,
+    },
+  },
+  {
+    method: 'GET',
+    path: '/connect/tiktok/callback',
+    handler: 'auth.callbackTikTok',
+    config: {
+      auth: false,
+    },
+  },
+
+  // === GESTIÓN DE CUENTAS ===
+  {
+    method: 'GET',
+    path: '/accounts',
+    handler: 'auth.getConnectedAccounts',
+    config: {
+      auth: false, // TODO: Cambiar a true cuando esté integrado con auth de Strapi
     },
   },
 
@@ -43,7 +71,7 @@ export default [
     },
   },
 
-  // === DESARROLLO ===
+  // === DESARROLLO Y TESTING ===
   {
     method: 'POST',
     path: '/developer/add-fake-account',
@@ -56,6 +84,14 @@ export default [
     method: 'GET',
     path: '/developer/fake-posts',
     handler: 'sync.generateFakePosts',
+    config: {
+      auth: false,
+    },
+  },
+  {
+    method: 'GET',
+    path: '/test-tiktok',
+    handler: 'auth.testTikTok',
     config: {
       auth: false,
     },
