@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sw_social_accounts",
+  "info": {
+    "singularName": "social-account",
+    "pluralName": "social-accounts",
+    "displayName": "Social Account"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "private": true
+  },
+  "attributes": {
+    "username": {
+      "type": "string",
+      "required": true
+    },
+    "accountId": {
+      "type": "string",
+      "required": true,
+      "private": true
+    },
+    "accessToken": {
+      "type": "text",
+      "required": true,
+      "private": true
+    },
+    "tokenExpires": {
+      "type": "datetime",
+      "private": true
+    },
+    "platform": {
+      "type": "enumeration",
+      "enum": [
+        "instagram",
+        "tiktok"
+      ],
+      "required": true
+    },
+    "configurations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::social-widgets.widget-configuration",
+      "mappedBy": "account"
+    }
+  }
+}

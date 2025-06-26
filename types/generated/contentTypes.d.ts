@@ -373,6 +373,34 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
+  collectionName: 'articles';
+  info: {
+    displayName: 'Article';
+    pluralName: 'articles';
+    singularName: 'article';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::article.article'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    Title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -607,6 +635,94 @@ export interface PluginReviewWorkflowsWorkflowStage
       'manyToOne',
       'plugin::review-workflows.workflow'
     >;
+  };
+}
+
+export interface PluginSocialWidgetsSocialAccount
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'sw_social_accounts';
+  info: {
+    displayName: 'Social Account';
+    pluralName: 'social-accounts';
+    singularName: 'social-account';
+  };
+  options: {
+    draftAndPublish: false;
+    private: true;
+  };
+  attributes: {
+    accessToken: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
+    accountId: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
+    configurations: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::social-widgets.widget-configuration'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::social-widgets.social-account'
+    > &
+      Schema.Attribute.Private;
+    platform: Schema.Attribute.Enumeration<['instagram', 'tiktok']> &
+      Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    tokenExpires: Schema.Attribute.DateTime & Schema.Attribute.Private;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    username: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PluginSocialWidgetsWidgetConfiguration
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'sw_widget_configurations';
+  info: {
+    displayName: 'Widget Configuration';
+    pluralName: 'widget-configurations';
+    singularName: 'widget-configuration';
+  };
+  options: {
+    draftAndPublish: false;
+    private: true;
+  };
+  attributes: {
+    account: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::social-widgets.social-account'
+    >;
+    backgroundColor: Schema.Attribute.String;
+    cachedData: Schema.Attribute.JSON & Schema.Attribute.Private;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    height: Schema.Attribute.String & Schema.Attribute.DefaultTo<'auto'>;
+    lastUpdated: Schema.Attribute.DateTime & Schema.Attribute.Private;
+    layout: Schema.Attribute.Enumeration<['grid', 'slider']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'grid'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::social-widgets.widget-configuration'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    postsToShow: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<9>;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updateFrequency: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<60>;
+    width: Schema.Attribute.String & Schema.Attribute.DefaultTo<'100%'>;
   };
 }
 
@@ -882,11 +998,14 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::article.article': ApiArticleArticle;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::review-workflows.workflow': PluginReviewWorkflowsWorkflow;
       'plugin::review-workflows.workflow-stage': PluginReviewWorkflowsWorkflowStage;
+      'plugin::social-widgets.social-account': PluginSocialWidgetsSocialAccount;
+      'plugin::social-widgets.widget-configuration': PluginSocialWidgetsWidgetConfiguration;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;

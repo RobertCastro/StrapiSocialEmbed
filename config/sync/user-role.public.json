@@ -1,0 +1,69 @@
+{
+  "documentId": "bj5hsal3zfnog8vqwxhgynz7",
+  "name": "Public",
+  "description": "Default role given to unauthenticated user.",
+  "type": "public",
+  "locale": null,
+  "permissions": [
+    {
+      "documentId": "oal5a04giwoea8sf6x7r3xju",
+      "action": "api::article.article.create",
+      "locale": null
+    },
+    {
+      "documentId": "qkredvuv5pmrrz1xw7znzfh2",
+      "action": "api::article.article.delete",
+      "locale": null
+    },
+    {
+      "documentId": "czo7nk33b76oic4iany8t9oq",
+      "action": "api::article.article.find",
+      "locale": null
+    },
+    {
+      "documentId": "j1cnik1pqut7vb7jpm2l60pn",
+      "action": "api::article.article.findOne",
+      "locale": null
+    },
+    {
+      "documentId": "plusbe358cwh2xctttcid09u",
+      "action": "api::article.article.update",
+      "locale": null
+    },
+    {
+      "documentId": "nysviuayvwn5j9woizrdjiie",
+      "action": "plugin::users-permissions.auth.callback",
+      "locale": null
+    },
+    {
+      "documentId": "sxj0d4adl42a5jg5jeuqdp4q",
+      "action": "plugin::users-permissions.auth.connect",
+      "locale": null
+    },
+    {
+      "documentId": "syps9x8apqnb0uuwno9lnq84",
+      "action": "plugin::users-permissions.auth.emailConfirmation",
+      "locale": null
+    },
+    {
+      "documentId": "lwccw7b8iy1g0vc2c5qqf8da",
+      "action": "plugin::users-permissions.auth.forgotPassword",
+      "locale": null
+    },
+    {
+      "documentId": "y5mj4ih1d1y8l184il4jiw2o",
+      "action": "plugin::users-permissions.auth.register",
+      "locale": null
+    },
+    {
+      "documentId": "oe7b6ewpdzjs1i74otymzhsw",
+      "action": "plugin::users-permissions.auth.resetPassword",
+      "locale": null
+    },
+    {
+      "documentId": "g4ggqwbk8pm8u3u4a9ibakal",
+      "action": "plugin::users-permissions.auth.sendEmailConfirmation",
+      "locale": null
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sw_widget_configurations",
+  "info": {
+    "singularName": "widget-configuration",
+    "pluralName": "widget-configurations",
+    "displayName": "Widget Configuration"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "private": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "layout": {
+      "type": "enumeration",
+      "enum": [
+        "grid",
+        "slider"
+      ],
+      "default": "grid",
+      "required": true
+    },
+    "updateFrequency": {
+      "type": "integer",
+      "default": 60,
+      "description": "Frecuencia de actualización en minutos"
+    },
+    "postsToShow": {
+      "type": "integer",
+      "default": 9
+    },
+    "width": {
+      "type": "string",
+      "default": "100%"
+    },
+    "height": {
+      "type": "string",
+      "default": "auto"
+    },
+    "backgroundColor": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "cachedData": {
+      "type": "json",
+      "private": true
+    },
+    "lastUpdated": {
+      "type": "datetime",
+      "private": true
+    },
+    "account": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::social-widgets.social-account",
+      "inversedBy": "configurations"
+    }
+  }
+}
