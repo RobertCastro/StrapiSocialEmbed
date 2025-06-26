@@ -14,7 +14,7 @@ const HomePage = () => {
     setIsLoading(true);
     try {
       console.log('Making request to:', '/social-widgets/developer/add-fake-account');
-      
+
       const response = await authenticatedFetch('/social-widgets/developer/add-fake-account', {
         method: 'POST',
       });
@@ -45,14 +45,14 @@ const HomePage = () => {
       setIsLoading(false);
     }
   };
- 
+
   return (
     <Box padding={8}>
       <Box paddingBottom={4}>
         <Typography variant="alpha">Gestión de Social Widgets</Typography>
       </Box>
       <Box>
-        {process.env.NODE_ENV === 'development' && (
+        {(process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production') && (
           <Box paddingTop={4}>
             <Typography variant="beta">Opciones de Desarrollo</Typography>
             <Box paddingTop={2}>
