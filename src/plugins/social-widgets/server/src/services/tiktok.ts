@@ -1,3 +1,5 @@
+// server/src/services/tiktok.ts
+
 interface TikTokTokenResponse {
     access_token: string;
     expires_in: number;
@@ -94,53 +96,61 @@ interface TikTokTokenResponse {
     },
 
     /**
-     * ✅ SOLUCIÓN: Almacena PKCE en base de datos PostgreSQL en lugar de memoria
+     * ✅ SOLUCIÓN SIMPLE: Almacena PKCE usando nuestro propio modelo
      */
     async storePKCE(state: string, codeVerifier: string): Promise<void> {
       try {
-        // Crear entrada temporal en base de datos
-        await strapi.db.query('core_store').create({
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutos
+
+        // Crear entrada en nuestro modelo pkce-session
+        await strapi.entityService.create('plugin::social-widgets.pkce-session', {
           data: {
-            key: `plugin_social_widgets_pkce_${state}`,
-            value: JSON.stringify({
-              codeVerifier,
-              createdAt: new Date(),
-              expiresAt: new Date(Date.now() + 10 * 60 * 1000) // 10 minutos
-            }),
-            type: 'string',
-            environment: process.env.NODE_ENV || 'development',
-            tag: 'social-widgets-pkce'
+            state,
+            codeVerifier,
+            expiresAt: expiresAt.toISOString()
           }
         });
 
         strapi.log.info('PKCE stored in database:', { state: state.substring(0, 8) + '...' });
       } catch (error) {
         strapi.log.error('Error storing PKCE in database:', error);
-        throw new Error('Failed to store PKCE data');
+        // Fallback a memoria si la DB falla
+        this._tempPkceStorage = this._tempPkceStorage || new Map();
+        this._tempPkceStorage.set(state, codeVerifier);
+        strapi.log.warn('PKCE stored in memory as fallback');
       }
     },
 
     /**
-     * ✅ SOLUCIÓN: Recupera PKCE desde base de datos PostgreSQL
+     * ✅ SOLUCIÓN SIMPLE: Recupera PKCE desde nuestro modelo
      */
     async getPKCE(state: string): Promise<string | undefined> {
       try {
-        const pkceRecord = await strapi.db.query('core_store').findOne({
-          where: {
-            key: `plugin_social_widgets_pkce_${state}`
-          }
+        // Buscar en nuestro modelo pkce-session
+        const pkceRecords = await strapi.entityService.findMany('plugin::social-widgets.pkce-session', {
+          filters: { state },
+          limit: 1
         });
 
-        if (!pkceRecord) {
-          strapi.log.warn('PKCE not found in database:', { state: state.substring(0, 8) + '...' });
+        if (!pkceRecords || pkceRecords.length === 0) {
+          // Fallback a memoria temporal
+          this._tempPkceStorage = this._tempPkceStorage || new Map();
+          const fallbackValue = this._tempPkceStorage.get(state);
+          if (fallbackValue) {
+            strapi.log.info('PKCE retrieved from memory fallback:', { state: state.substring(0, 8) + '...' });
+            return fallbackValue;
+          }
+
+          strapi.log.warn('PKCE not found in database or memory:', { state: state.substring(0, 8) + '...' });
           return undefined;
         }
 
-        const pkceData = JSON.parse(pkceRecord.value);
-        const now = new Date();
-        const expiresAt = new Date(pkceData.expiresAt);
+        const pkceRecord = pkceRecords[0];
 
         // Verificar si ha expirado
+        const now = new Date();
+        const expiresAt = new Date(pkceRecord.expiresAt);
+
         if (now > expiresAt) {
           strapi.log.warn('PKCE expired in database:', {
             state: state.substring(0, 8) + '...',
@@ -153,70 +163,96 @@ interface TikTokTokenResponse {
         }
 
         strapi.log.info('PKCE retrieved from database:', { state: state.substring(0, 8) + '...' });
-        return pkceData.codeVerifier;
+        return pkceRecord.codeVerifier;
 
       } catch (error) {
         strapi.log.error('Error retrieving PKCE from database:', error);
+
+        // Fallback a memoria temporal
+        this._tempPkceStorage = this._tempPkceStorage || new Map();
+        const fallbackValue = this._tempPkceStorage.get(state);
+        if (fallbackValue) {
+          strapi.log.info('PKCE retrieved from memory fallback after DB error');
+          return fallbackValue;
+        }
+
         return undefined;
       }
     },
 
     /**
-     * ✅ NUEVO: Limpia PKCE después de uso exitoso
+     * ✅ ACTUALIZADO: Limpia PKCE usando nuestro modelo
      */
     async cleanupPKCE(state: string): Promise<void> {
       try {
-        await strapi.db.query('core_store').delete({
-          where: {
-            key: `plugin_social_widgets_pkce_${state}`
-          }
+        // Buscar y eliminar registros con este state
+        const pkceRecords = await strapi.entityService.findMany('plugin::social-widgets.pkce-session', {
+          filters: { state }
         });
+
+        for (const record of pkceRecords) {
+          await strapi.entityService.delete('plugin::social-widgets.pkce-session', record.id);
+        }
+
+        // También limpiar de memoria fallback si existe
+        if (this._tempPkceStorage) {
+          this._tempPkceStorage.delete(state);
+        }
+
         strapi.log.info('PKCE cleaned from database:', { state: state.substring(0, 8) + '...' });
       } catch (error) {
         strapi.log.error('Error cleaning PKCE from database:', error);
+
+        // Al menos limpiar de memoria
+        if (this._tempPkceStorage) {
+          this._tempPkceStorage.delete(state);
+        }
       }
     },
 
     /**
-     * ✅ NUEVO: Limpia PKCEs expirados (para ejecutar periódicamente)
+     * ✅ ACTUALIZADO: Limpia PKCEs expirados usando nuestro modelo
      */
     async cleanupExpiredPKCE(): Promise<void> {
       try {
-        // Buscar todos los registros PKCE
-        const pkceRecords = await strapi.db.query('core_store').findMany({
-          where: {
-            key: {
-              $startsWith: 'plugin_social_widgets_pkce_'
+        const now = new Date();
+
+        // Buscar todos los registros expirados
+        const expiredRecords = await strapi.entityService.findMany('plugin::social-widgets.pkce-session', {
+          filters: {
+            expiresAt: {
+              $lt: now.toISOString()
             }
           }
         });
 
         let cleanedCount = 0;
-        for (const record of pkceRecords) {
+        for (const record of expiredRecords) {
           try {
-            const pkceData = JSON.parse(record.value);
-            if (new Date(pkceData.expiresAt) < new Date()) {
-              await strapi.db.query('core_store').delete({
-                where: { id: record.id }
-              });
-              cleanedCount++;
-            }
-          } catch (error) {
-            // Si no se puede parsear, eliminar el registro corrupto
-            await strapi.db.query('core_store').delete({
-              where: { id: record.id }
-            });
+            await strapi.entityService.delete('plugin::social-widgets.pkce-session', record.id);
             cleanedCount++;
+          } catch (error) {
+            strapi.log.error('Error deleting expired PKCE record:', error);
           }
         }
 
         if (cleanedCount > 0) {
           strapi.log.info(`🧹 Cleaned ${cleanedCount} expired PKCE records from database`);
         }
+
+        // También limpiar memoria fallback si existe
+        if (this._tempPkceStorage && this._tempPkceStorage.size > 0) {
+          this._tempPkceStorage.clear();
+          strapi.log.info('🧹 Cleaned memory fallback PKCE storage');
+        }
+
       } catch (error) {
         strapi.log.error('Error cleaning expired PKCE records:', error);
       }
     },
+
+    // ✅ AGREGADO: Almacenamiento temporal en memoria como fallback
+    _tempPkceStorage: undefined as Map<string, string> | undefined,
 
     /**
      * Type guard para verificar si es una respuesta de error

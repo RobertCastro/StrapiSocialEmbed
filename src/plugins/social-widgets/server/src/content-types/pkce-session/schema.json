@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pkce_sessions",
+  "info": {
+    "singularName": "pkce-session",
+    "pluralName": "pkce-sessions",
+    "displayName": "PKCE Session",
+    "description": "Temporary storage for TikTok OAuth PKCE code verifiers"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": "Internal model for TikTok OAuth PKCE storage"
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "state": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 255
+    },
+    "codeVerifier": {
+      "type": "text",
+      "required": true
+    },
+    "expiresAt": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}

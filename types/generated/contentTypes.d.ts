@@ -638,6 +638,44 @@ export interface PluginReviewWorkflowsWorkflowStage
   };
 }
 
+export interface PluginSocialWidgetsPkceSession
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'pkce_sessions';
+  info: {
+    description: 'Temporary storage for TikTok OAuth PKCE code verifiers';
+    displayName: 'PKCE Session';
+    pluralName: 'pkce-sessions';
+    singularName: 'pkce-session';
+  };
+  options: {
+    comment: 'Internal model for TikTok OAuth PKCE storage';
+    draftAndPublish: false;
+  };
+  attributes: {
+    codeVerifier: Schema.Attribute.Text & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    expiresAt: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::social-widgets.pkce-session'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    state: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginSocialWidgetsSocialAccount
   extends Struct.CollectionTypeSchema {
   collectionName: 'sw_social_accounts';
@@ -1004,6 +1042,7 @@ declare module '@strapi/strapi' {
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::review-workflows.workflow': PluginReviewWorkflowsWorkflow;
       'plugin::review-workflows.workflow-stage': PluginReviewWorkflowsWorkflowStage;
+      'plugin::social-widgets.pkce-session': PluginSocialWidgetsPkceSession;
       'plugin::social-widgets.social-account': PluginSocialWidgetsSocialAccount;
       'plugin::social-widgets.widget-configuration': PluginSocialWidgetsWidgetConfiguration;
       'plugin::upload.file': PluginUploadFile;
