@@ -417,7 +417,7 @@ interface TikTokTokenResponse {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data = await response.json() as TikTokAPIResponse<{ user: TikTokUserInfo }>;
 
       if (data.error) {
         throw new Error(`TikTok user info failed: ${data.error.message}`);
@@ -449,7 +449,7 @@ interface TikTokTokenResponse {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data = await response.json() as TikTokAPIResponse<TikTokVideosResponse>;
 
       if (data.error) {
         throw new Error(`TikTok videos fetch failed: ${data.error.message}`);
