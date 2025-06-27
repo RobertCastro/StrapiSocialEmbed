@@ -42,13 +42,15 @@ export default ({ strapi }: { strapi: any }) => ({
   // ========== TIKTOK ==========
   async connectTikTok(ctx) {
     try {
+      // ✅ CAMBIO: Ahora getAuthorizationUrl es async
       const authData = await strapi.plugin('social-widgets').service('tiktok').getAuthorizationUrl();
-      
+
       strapi.log.info('TikTok OAuth URL with PKCE generated:', {
         state: authData.state,
-        hasCodeVerifier: !!authData.codeVerifier
+        hasCodeVerifier: !!authData.codeVerifier,
+        storedInDB: true
       });
-      
+
       ctx.redirect(authData.authUrl);
     } catch (err) {
       strapi.log.error('TikTok connect error:', err);
@@ -82,7 +84,13 @@ export default ({ strapi }: { strapi: any }) => ({
     }
 
     try {
-      // 1. Intercambiar código por token (ahora incluye state para PKCE)
+      strapi.log.info('TikTok callback started:', {
+        hasCode: !!code,
+        hasState: !!state,
+        state: state.substring(0, 8) + '...'
+      });
+
+      // 1. ✅ Intercambiar código por token (ahora busca PKCE en base de datos)
       const tokenData = await strapi.plugin('social-widgets')
         .service('tiktok').exchangeCodeForToken(code, state);
 
@@ -92,9 +100,9 @@ export default ({ strapi }: { strapi: any }) => ({
       const userInfo = await strapi.plugin('social-widgets')
         .service('tiktok').getUserInfo(tokenData.access_token);
 
-      strapi.log.info('TikTok user info obtained:', { 
-        username: userInfo.username, 
-        display_name: userInfo.display_name 
+      strapi.log.info('TikTok user info obtained:', {
+        username: userInfo.username,
+        display_name: userInfo.display_name
       });
 
       // 3. Calcular fecha de expiración
@@ -102,9 +110,9 @@ export default ({ strapi }: { strapi: any }) => ({
 
       // 4. Crear o actualizar SocialAccount
       const existingAccount = await strapi.entityService.findMany('plugin::social-widgets.social-account', {
-        filters: { 
-          platform: 'tiktok', 
-          accountId: userInfo.open_id 
+        filters: {
+          platform: 'tiktok',
+          accountId: userInfo.open_id
         }
       });
 
@@ -119,7 +127,7 @@ export default ({ strapi }: { strapi: any }) => ({
             username: userInfo.username || userInfo.display_name
           }
         });
-        
+
         strapi.log.info('TikTok account updated:', account.id);
       } else {
         // Crear nueva cuenta
@@ -133,7 +141,7 @@ export default ({ strapi }: { strapi: any }) => ({
             tokenExpires: tokenExpires.toISOString()
           }
         });
-        
+
         strapi.log.info('TikTok account created:', account.id);
       }
 
@@ -156,9 +164,9 @@ export default ({ strapi }: { strapi: any }) => ({
 
     } catch (err) {
       strapi.log.error('TikTok callback processing error:', err);
-      ctx.body = { 
-        error: 'Error processing TikTok callback', 
-        details: err.message 
+      ctx.body = {
+        error: 'Error processing TikTok callback',
+        details: err.message
       };
       ctx.status = 500;
     }
@@ -187,7 +195,7 @@ export default ({ strapi }: { strapi: any }) => ({
       });
 
       console.log(`Cuenta ${platform} de prueba creada:`, newAccount);
-      
+
       ctx.body = {
         success: true,
         message: `Fake ${platform} account created successfully`,
@@ -235,15 +243,17 @@ export default ({ strapi }: { strapi: any }) => ({
   async testTikTok(ctx) {
     try {
       const tiktokService = strapi.plugin('social-widgets').service('tiktok');
-      const authData = tiktokService.getAuthorizationUrl();
-      
+
+      // ✅ CAMBIO: Ahora getAuthorizationUrl es async
+      const authData = await tiktokService.getAuthorizationUrl();
+
       // Extraer redirect_uri de la URL para debugging
       const url = new URL(authData.authUrl);
       const redirectUri = url.searchParams.get('redirect_uri');
-      
-      ctx.body = { 
-        success: true, 
-        message: 'TikTok service loaded correctly with PKCE',
+
+      ctx.body = {
+        success: true,
+        message: 'TikTok service loaded correctly with PKCE (DB storage)',
         hasAuthUrl: !!authData.authUrl,
         authUrl: authData.authUrl,
         state: authData.state,
@@ -251,13 +261,14 @@ export default ({ strapi }: { strapi: any }) => ({
         redirectUri: redirectUri,
         debugInfo: {
           STRAPI_ADMIN_URL: process.env.STRAPI_ADMIN_URL,
-          computedRedirectUri: `${process.env.STRAPI_ADMIN_URL || 'http://localhost:1337'}/social-widgets/connect/tiktok/callback`
+          computedRedirectUri: `${process.env.STRAPI_ADMIN_URL || 'http://localhost:1337'}/social-widgets/connect/tiktok/callback`,
+          storageType: 'PostgreSQL Database'
         }
       };
     } catch (err) {
-      ctx.body = { 
-        error: 'TikTok service error', 
-        details: err.message 
+      ctx.body = {
+        error: 'TikTok service error',
+        details: err.message
       };
       ctx.status = 500;
     }
