@@ -1,0 +1,154 @@
+{
+  "key": "plugin_content_manager_configuration_content_types::plugin::social-widgets.pkce-session",
+  "value": {
+    "settings": {
+      "bulkable": true,
+      "filterable": true,
+      "searchable": true,
+      "pageSize": 10,
+      "mainField": "state",
+      "defaultSortBy": "state",
+      "defaultSortOrder": "ASC"
+    },
+    "metadatas": {
+      "id": {
+        "edit": {},
+        "list": {
+          "label": "id",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "state": {
+        "edit": {
+          "label": "state",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "state",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "codeVerifier": {
+        "edit": {
+          "label": "codeVerifier",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "codeVerifier",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "expiresAt": {
+        "edit": {
+          "label": "expiresAt",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "expiresAt",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "createdAt": {
+        "edit": {
+          "label": "createdAt",
+          "description": "",
+          "placeholder": "",
+          "visible": false,
+          "editable": true
+        },
+        "list": {
+          "label": "createdAt",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "updatedAt": {
+        "edit": {
+          "label": "updatedAt",
+          "description": "",
+          "placeholder": "",
+          "visible": false,
+          "editable": true
+        },
+        "list": {
+          "label": "updatedAt",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "createdBy": {
+        "edit": {
+          "label": "createdBy",
+          "description": "",
+          "placeholder": "",
+          "visible": false,
+          "editable": true,
+          "mainField": "firstname"
+        },
+        "list": {
+          "label": "createdBy",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "updatedBy": {
+        "edit": {
+          "label": "updatedBy",
+          "description": "",
+          "placeholder": "",
+          "visible": false,
+          "editable": true,
+          "mainField": "firstname"
+        },
+        "list": {
+          "label": "updatedBy",
+          "searchable": true,
+          "sortable": true
+        }
+      }
+    },
+    "layouts": {
+      "list": [
+        "id",
+        "state",
+        "codeVerifier",
+        "expiresAt"
+      ],
+      "edit": [
+        [
+          {
+            "name": "state",
+            "size": 6
+          },
+          {
+            "name": "codeVerifier",
+            "size": 6
+          }
+        ],
+        [
+          {
+            "name": "expiresAt",
+            "size": 6
+          }
+        ]
+      ]
+    },
+    "uid": "plugin::social-widgets.pkce-session"
+  },
+  "type": "object",
+  "environment": null,
+  "tag": null
+}

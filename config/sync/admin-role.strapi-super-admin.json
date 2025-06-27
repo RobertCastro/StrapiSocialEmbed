@@ -342,7 +342,70 @@
       "locale": null
     },
     {
-      "documentId": "z4b50r6yh7gskrjumi6lrpej",
+      "documentId": "b5emhep7ecg9s1bwzpwn3376",
+      "action": "plugin::content-manager.explorer.create",
+      "actionParameters": {},
+      "subject": "plugin::social-widgets.pkce-session",
+      "properties": {
+        "fields": [
+          "state",
+          "codeVerifier",
+          "expiresAt"
+        ]
+      },
+      "conditions": [],
+      "locale": null
+    },
+    {
+      "documentId": "ku9mz3eznkswm8ljw129043n",
+      "action": "plugin::content-manager.explorer.delete",
+      "actionParameters": {},
+      "subject": "plugin::social-widgets.pkce-session",
+      "properties": {},
+      "conditions": [],
+      "locale": null
+    },
+    {
+      "documentId": "djbm6zf5awmagcyivscy880c",
+      "action": "plugin::content-manager.explorer.publish",
+      "actionParameters": {},
+      "subject": "plugin::social-widgets.pkce-session",
+      "properties": {},
+      "conditions": [],
+      "locale": null
+    },
+    {
+      "documentId": "fxyekk4m9lhs1b9bqcxe7sqs",
+      "action": "plugin::content-manager.explorer.read",
+      "actionParameters": {},
+      "subject": "plugin::social-widgets.pkce-session",
+      "properties": {
+        "fields": [
+          "state",
+          "codeVerifier",
+          "expiresAt"
+        ]
+      },
+      "conditions": [],
+      "locale": null
+    },
+    {
+      "documentId": "lhq5t25aq7hkekibg3basfy3",
+      "action": "plugin::content-manager.explorer.update",
+      "actionParameters": {},
+      "subject": "plugin::social-widgets.pkce-session",
+      "properties": {
+        "fields": [
+          "state",
+          "codeVerifier",
+          "expiresAt"
+        ]
+      },
+      "conditions": [],
+      "locale": null
+    },
+    {
+      "documentId": "g0r01d4aqdpkl8zul1iuzxzt",
       "action": "plugin::content-manager.explorer.create",
       "actionParameters": {},
       "subject": "plugin::social-widgets.social-account",
@@ -360,7 +423,7 @@
       "locale": null
     },
     {
-      "documentId": "su2ys5t9uuddj1tu2l0owdu6",
+      "documentId": "u0uxqcm6dthz16ko5141sc2y",
       "action": "plugin::content-manager.explorer.delete",
       "actionParameters": {},
       "subject": "plugin::social-widgets.social-account",
@@ -369,7 +432,7 @@
       "locale": null
     },
     {
-      "documentId": "vgfk0lcbj27dvy0ohq3303hn",
+      "documentId": "nijotaiq1qepri2qnxqss5bs",
       "action": "plugin::content-manager.explorer.publish",
       "actionParameters": {},
       "subject": "plugin::social-widgets.social-account",
@@ -378,7 +441,7 @@
       "locale": null
     },
     {
-      "documentId": "c7sua0gyvuldeu9pppj0jfc0",
+      "documentId": "rk5ajxlnrc2o879aeo374pzc",
       "action": "plugin::content-manager.explorer.read",
       "actionParameters": {},
       "subject": "plugin::social-widgets.social-account",
@@ -396,7 +459,7 @@
       "locale": null
     },
     {
-      "documentId": "z36m9dgvdl3lr59o1fk7ixmg",
+      "documentId": "tt3unh5e9hcucwad13t7puhm",
       "action": "plugin::content-manager.explorer.update",
       "actionParameters": {},
       "subject": "plugin::social-widgets.social-account",
@@ -414,7 +477,7 @@
       "locale": null
     },
     {
-      "documentId": "cx24d20j13d6mszevah8h8hm",
+      "documentId": "wbo3kxn8kfoczbj2c5r59ich",
       "action": "plugin::content-manager.explorer.create",
       "actionParameters": {},
       "subject": "plugin::social-widgets.widget-configuration",
@@ -437,7 +500,7 @@
       "locale": null
     },
     {
-      "documentId": "g32ayg7610ln766uaknkp9ei",
+      "documentId": "wprppp9emzp5j5lc8c8xv1hj",
       "action": "plugin::content-manager.explorer.delete",
       "actionParameters": {},
       "subject": "plugin::social-widgets.widget-configuration",
@@ -446,7 +509,7 @@
       "locale": null
     },
     {
-      "documentId": "lxusjmnwht69oih0n6covrz2",
+      "documentId": "ha0apraykla228qd0wcselcc",
       "action": "plugin::content-manager.explorer.publish",
       "actionParameters": {},
       "subject": "plugin::social-widgets.widget-configuration",
@@ -455,7 +518,7 @@
       "locale": null
     },
     {
-      "documentId": "esg4hs83l9ul8m7fv7g341ag",
+      "documentId": "r1gajm8yk005y6z542gmn1io",
       "action": "plugin::content-manager.explorer.read",
       "actionParameters": {},
       "subject": "plugin::social-widgets.widget-configuration",
@@ -478,7 +541,7 @@
       "locale": null
     },
     {
-      "documentId": "v4ue9apn87vposs45mcusz3f",
+      "documentId": "m649i9xizkhnbovrc6chin6x",
       "action": "plugin::content-manager.explorer.update",
       "actionParameters": {},
       "subject": "plugin::social-widgets.widget-configuration",
